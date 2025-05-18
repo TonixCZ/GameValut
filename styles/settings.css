@@ -1,0 +1,106 @@
+body {
+    background: linear-gradient(135deg, #23243a 0%, #181824 100%);
+    min-height: 100vh;
+}
+.container {
+    max-width: 420px;
+}
+.profile-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 2px solid #3db4f2;
+    margin-bottom: 0.5em;
+    object-fit: cover;
+}
+.avatar-input {
+    max-width: 220px;
+    margin: 0 auto;
+}
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: 1.2em;
+    position: relative;
+}
+.form-row label {
+    min-width: 90px;
+    margin-bottom: 0;
+    font-weight: 500;
+    color: #3db4f2;
+}
+.form-row .form-control {
+    flex: 1 1 auto;
+    background: #23243a;
+    color: #fff;
+    border: 1.5px solid #6f52a3;
+    border-radius: 8px;
+    padding: 0.6em 1em;
+    font-size: 1em;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.form-row .form-control:focus,
+.form-row .form-control:not([readonly]) {
+    background: #fff !important;
+    color: #222 !important;
+    border-color: #ff6b81;
+}
+.edit-btn {
+    background: none;
+    border: none;
+    color: #3db4f2;
+    font-size: 1.3em;
+    cursor: pointer;
+    margin-left: 0.3em;
+    transition: color 0.2s;
+}
+.edit-btn:hover .edit-icon {
+    color: #ff6b81;
+}
+input[readonly] {
+    background: #23243a !important;
+    color: #aaa !important;
+    cursor: default;
+}
+.invalid-feedback {
+    display: block;
+    color: #ff6b81;
+    font-size: 0.97em;
+    margin-top: 0.2em;
+}
+.btn-success, .btn-secondary {
+    border-radius: 8px;
+    font-weight: 700;
+    padding: 0.5em 2em;
+    box-shadow: 0 2px 8px #6f52a3;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-success {
+    background: linear-gradient(90deg, #6f52a3 60%, #ff6b81 100%);
+    border: none;
+    color: #fff;
+}
+.btn-success:hover {
+    background: linear-gradient(90deg, #ff6b81 60%, #6f52a3 100%);
+    color: #fff;
+}
+.btn-secondary {
+    background: #23243a;
+    color: #fff;
+    border: 1px solid #6f52a3;
+}
+.btn-secondary:hover {
+    background: #6f52a3;
+    color: #fff;
+}
+@media (max-width: 767px) {
+    .container {
+        padding: 1.2rem 0.5rem 1rem 0.5rem;
+        max-width: 98vw;
+    }
+    .profile-avatar {
+        width: 60px !important;
+        height: 60px !important;
+    }
+}

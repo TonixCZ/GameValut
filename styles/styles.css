@@ -1,0 +1,217 @@
+body {
+  background: #181c24 url('assets/images/webindex.png') no-repeat top right fixed;
+  background-size: cover;
+  min-height: 100vh;
+  color: #eaeaea;
+}
+
+/* Hero sekce */
+.hero {
+  padding: 100px 20px;
+  background: rgba(44,62,80,0.90);
+  color: #fff;
+  border-radius: 24px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  margin-top: 2rem;
+  border: 2px solid #6f52a3;
+  backdrop-filter: blur(2px);
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  text-shadow: 0 2px 8px #6f52a3;
+}
+
+.hero p {
+  font-size: 1.25rem;
+}
+
+/* Featured carousel */
+.featured-carousel .carousel-item img {
+  object-fit: cover;
+  height: 320px;
+  border-radius: 18px;
+  filter: brightness(0.92) saturate(1.1);
+  box-shadow: 0 4px 24px #23272b99;
+}
+.featured-carousel .carousel-inner {
+  border-radius: 18px;
+  overflow: hidden;
+  background: linear-gradient(120deg, #23272b 80%, #6f52a3 100%);
+}
+
+/* Karty */
+.card-featured {
+  background: linear-gradient(135deg, #23272b 60%, #6f52a3 100%);
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1.5px solid #3db4f2;
+}
+.card-featured:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 32px #3db4f2cc;
+  border-color: #ff6b81;
+}
+
+.card {
+  background: rgba(30, 38, 49, 0.95);
+  border: none;
+  border-radius: 15px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+.card-title a {
+  color: #ff6b81;
+  text-decoration: none;
+}
+.card-title a:hover {
+  text-decoration: underline;
+}
+.card-text {
+  color: #cfd2d6;
+}
+
+/* News block */
+.news-block {
+  background: linear-gradient(120deg, #23272b 80%, #6f52a3 100%);
+  color: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+  padding: 1.5rem 1.2rem;
+  margin-bottom: 2rem;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  border-left: 6px solid #ff6b81;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.news-block:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+  transform: translateY(-4px) scale(1.01);
+}
+.news-block h5 {
+  color: #ff6b81;
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 0.2em;
+  letter-spacing: 0.5px;
+}
+.news-block .badge {
+  background: #ff6b81;
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.4em 0.7em;
+  font-size: 1.1em;
+  margin-right: 0.5em;
+  box-shadow: 0 2px 8px #6f52a3;
+}
+.news-block .news-meta {
+  font-size: 0.95em;
+  color: #bdbdbd;
+  margin-top: auto;
+  text-align: right;
+}
+
+/* Join Us sekce */
+.join-us {
+  background: linear-gradient(135deg, #08047b 60%, #6f52a3 100%);
+  color: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #6f52a3cc;
+  border: 2px solid #3db4f2;
+  position: relative;
+  overflow: hidden;
+  padding: 2.5rem 1.5rem;
+}
+.join-us:before {
+  content: "";
+  position: absolute;
+  left: -80px;
+  top: -80px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, #ff6b81 0%, transparent 70%);
+  opacity: 0.18;
+  z-index: 0;
+}
+.join-us .btn {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #6f52a3;
+  background: linear-gradient(90deg, #6f52a3 60%, #ff6b81 100%);
+  border: none;
+  color: #fff;
+  transition: background 0.2s;
+}
+.join-us .btn:hover {
+  background: linear-gradient(90deg, #ff6b81 60%, #6f52a3 100%);
+  color: #fff;
+}
+
+/* Tlačítka */
+.btn-primary {
+  background-color: #ff6b81;
+  border: none;
+}
+.btn-primary:hover {
+  background-color: #e0556f;
+}
+.btn-outline-light {
+  border: 2px solid #fff;
+  color: #fff;
+  background: transparent;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-outline-light:hover {
+  background: #ff6b81;
+  color: #fff;
+  border-color: #ff6b81;
+}
+
+/* Sekce titulek */
+.section-title {
+  color: #ff6b81;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 8px #6f52a3;
+}
+
+/* Reklamní blok */
+.ad-space {
+  margin-bottom: 20px;
+}
+.ad-space img {
+  max-width: 100%;
+  border: 2px solid #444;
+}
+
+/* Responsivita */
+@media (max-width: 767px) {
+  .hero {
+    padding: 40px 10px;
+    font-size: 1.2rem;
+  }
+  .featured-carousel .carousel-item img {
+    height: 180px;
+  }
+  .news-block {
+    padding: 1rem 0.5rem;
+    min-height: 120px;
+  }
+  .join-us {
+    padding: 1.2rem 0.5rem;
+  }
+}

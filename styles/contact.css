@@ -1,0 +1,52 @@
+body {
+    background: linear-gradient(135deg, #23243a 0%, #181824 100%);
+    min-height: 100vh;
+}
+.contact-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background: #23243a;
+    border-radius: 16px;
+    box-shadow: 0 6px 32px rgba(44,62,80,0.18);
+    padding: 2.5rem 2rem 2rem 2rem;
+    margin-top: 3rem;
+    color: #fff;
+}
+.contact-form .form-label {
+    color: #3db4f2;
+    font-weight: 500;
+}
+.contact-form .form-control {
+    background: #fff;
+    color: #222;
+    border: 1.5px solid #6f52a3;
+    border-radius: 8px;
+    padding: 0.6em 1em;
+    font-size: 1em;
+    margin-bottom: 0.7em;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.contact-form .form-control:focus {
+    border-color: #ff6b81;
+    background: #f8f9fa;
+    color: #222;
+}
+.btn-success {
+    background: linear-gradient(90deg, #6f52a3 60%, #ff6b81 100%);
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    font-weight: 700;
+    padding: 0.5em 2em;
+    box-shadow: 0 2px 8px #6f52a3;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-success:hover {
+    background: linear-gradient(90deg, #ff6b81 60%, #6f52a3 100%);
+    color: #fff;
+}
+.alert-success, .alert-danger {
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 1.08em;
+}

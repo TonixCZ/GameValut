@@ -1,0 +1,25 @@
+# Zapnout mod_rewrite
+RewriteEngine On
+
+# Pokud existuje soubor nebo složka, neřeš přepis
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Přepis pro detail hry: /game/nazev-hry => game_detail.php?slug=nazev-hry
+RewriteRule ^game/([a-zA-Z0-9\-_]+)$ game_detail.php?slug=$1 [L,QSA]
+
+# Nastavit výchozí kódování
+AddDefaultCharset UTF-8
+
+# Skrytí chyb (v produkci)
+php_flag display_errors Off
+
+# Ochrana config.php
+<Files "config.php">
+    Deny from all
+</Files>
+
+# Ochrana .htaccess
+<Files .htaccess>
+    Deny from all
+</Files>

@@ -1,0 +1,256 @@
+body {
+    background: linear-gradient(135deg, #181824 0%, #23243a 60%, #372a70 100%);
+    background-attachment: fixed;
+    background-size: cover;
+    color: #eaeaea;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+.container {
+    position: relative;
+    z-index: 1;
+}
+
+.game-detail-card {
+    background: linear-gradient(120deg, #23243a 80%, #181824 100%);
+    border-radius: 22px;
+    box-shadow: 0 8px 32px rgba(44,62,80,0.22);
+    padding: 2.2rem 2rem 1.5rem 2rem;
+    margin-bottom: 2.5rem;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    z-index: 2;
+    border: 2px solid #3db4f2;
+    text-align: center;
+}
+
+.game-detail-info {
+    background: rgba(24, 24, 36, 0.96);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(44,62,80,0.18);
+    padding: 2.5rem 2.5rem 2rem 2.5rem;
+    margin-top: 2rem;
+    margin-bottom: 2.5rem;
+    color: #fff;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    z-index: 2;
+    border: 2px solid #23243a;
+    text-align: center;
+}
+
+.game-image {
+    width: 100%;
+    max-width: 420px;
+    max-height: 420px;
+    border-radius: 22px;
+    box-shadow: 0 8px 32px rgba(44,62,80,0.25);
+    background: #23243a;
+    object-fit: cover;
+    margin-bottom: 2rem;
+}
+
+h2 {
+    color: #ff6b81;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 0.7em;
+    text-shadow: 0 2px 8px #6f52a3;
+}
+
+.section-title {
+    border-bottom: 2px solid #3db4f2;
+    padding-bottom: 10px;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #3db4f2;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.review-card {
+    border-left: 5px solid #3db4f2;
+    background: linear-gradient(120deg, #23243a 80%, #181824 100%);
+    color: #eaeaea;
+    margin-bottom: 1.3rem;
+    padding: 1.2rem 1.2rem 0.9rem 1.2rem;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(44,62,80,0.13);
+    transition: background 0.3s, border-color 0.3s;
+    position: relative;
+}
+.review-card.my-review {
+    background: linear-gradient(120deg, #284d28 80%, #23243a 100%);
+    border-color: #90ee90;
+    box-shadow: 0 4px 18px #90ee9033;
+}
+.review-card .username {
+    font-weight: bold;
+    color: #3db4f2;
+    font-size: 1.08em;
+}
+.review-card.my-review .username {
+    color: #90ee90;
+}
+.review-card .text-warning {
+    font-size: 1.1em;
+    letter-spacing: 1px;
+}
+.review-card small {
+    color: #bdbdbd;
+}
+.review-card .btn-sm {
+    margin-left: 0.3em;
+}
+
+.review-card .d-flex {
+    margin-bottom: 0.5em;
+}
+
+.review-card p {
+    margin-bottom: 0.5em;
+    font-size: 1.05em;
+}
+
+.review-form textarea,
+#review-form-container textarea {
+    resize: none;
+    background: #23243a;
+    color: #fff;
+    border: 1.5px solid #6f52a3;
+    border-radius: 8px;
+    padding: 0.7em 1em;
+    margin-bottom: 1em;
+    font-size: 1.05em;
+    transition: border-color 0.2s, background 0.2s;
+}
+.review-form textarea:focus,
+#review-form-container textarea:focus {
+    border-color: #ff6b81;
+    background: #2c3e50;
+    color: #fff;
+}
+
+.review-form .form-label,
+#review-form-container .form-label {
+    color: #3db4f2;
+    font-weight: 600;
+}
+
+#review-form-container {
+    display: block;
+    margin-top: 1.5rem;
+    background: linear-gradient(120deg, #23243a 80%, #181824 100%);
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(44,62,80,0.13);
+    padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-primary, .btn-success {
+    background: linear-gradient(90deg, #6f52a3 60%, #ff6b81 100%);
+    border: none;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 0.5em 2em;
+    color: #fff;
+    box-shadow: 0 2px 8px #6f52a3;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-primary:hover, .btn-success:hover {
+    background: linear-gradient(90deg, #ff6b81 60%, #6f52a3 100%);
+    color: #fff;
+}
+.btn-secondary {
+    background: #23243a;
+    color: #fff;
+    border: 1px solid #6f52a3;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.5em 2em;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-secondary:hover {
+    background: #6f52a3;
+    color: #fff;
+}
+
+.alert {
+    font-weight: 600;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #6f52a3;
+    letter-spacing: 0.5px;
+}
+
+.star-rating {
+    direction: ltr;
+    font-size: 2rem;
+    unicode-bidi: bidi-override;
+    display: flex;
+    gap: 0.2em;
+    justify-content: center;
+    cursor: pointer;
+    margin-bottom: 0.5em;
+}
+.star {
+    color: #444;
+    position: relative;
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    font-size: 1.2em;
+}
+.star:before {
+    content: "☆";
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    color: #444;
+    transition: color 0.2s;
+    z-index: 1;
+}
+.star.filled:before {
+    content: "★";
+    color: #ffb347;
+    z-index: 2;
+}
+.star.half:before {
+    content: "★";
+    color: #ffb347;
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    height: 100%;
+    clip-path: inset(0 63% 0 0); /* přesně polovina zleva doprava */
+    z-index: 2;
+}
+.star.half {
+    overflow: hidden;
+}
+
+@media (max-width: 767px) {
+    .game-image {
+        max-height: 220px;
+    }
+    .review-card, #review-form-container {
+        padding: 1em 0.5em;
+    }
+    .game-detail-card {
+        padding: 1.2rem 0.5rem 1rem 0.5rem;
+        max-width: 98vw;
+    }
+    .game-image {
+        max-width: 98vw;
+        max-height: 220px;
+    }
+    .game-detail-title {
+        font-size: 1.5rem;
+    }
+}
