@@ -1,10 +1,10 @@
 <?php
 // Project: Game:Valut
 
-$host = 'db.dw237.webglobe.com';
-$dbname = 'game_valut'; // ZDE případně uprav na skutečný název databáze!
-$user = 'tonix';
-$pass = 'Emmicka22';
+$host = 'your_db_host';
+$dbname = 'your_db_name';
+$user = 'your_db_user';
+$pass = 'your_db_password';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";

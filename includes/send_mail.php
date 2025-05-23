@@ -12,21 +12,21 @@ function sendVerificationMail($to, $nickname, $token) {
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
-        $mail->Host = 'mail.webglobe.cz';
+        $mail->Host = 'your_mail_host';
         $mail->SMTPAuth = true;
-        $mail->Username = 'info@games-hub.eu';
-        $mail->Password = 'Emmicka22.'; // Your password
+        $mail->Username = 'your_email@example.com';
+        $mail->Password = 'your_password'; // Your password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port = 465;
 
-        $mail->setFrom('info@games-hub.eu', 'Game Valut');
+        $mail->setFrom('your_email@example.com', 'Game Valut');
         $mail->addAddress($to, $nickname);
 
         $mail->isHTML(true);
         $mail->Subject = 'Welcome to GameValut! Please confirm your registration';
 
-        $verifyUrl = "https://games-hub.eu/verify.php?token=$token";
-        $logoUrl = "https://games-hub.eu/assets/images/EmailLogo.png"; // <-- správná URL k logu
+        $verifyUrl = "https://your-domain.com/verify.php?token=$token";
+        $logoUrl = "https://your-domain.com/assets/images/EmailLogo.png";
 
         $mail->Body = "
             <div style='text-align:center;'>
