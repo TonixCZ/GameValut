@@ -6,6 +6,10 @@ if (isset($_SESSION['user_id'])) {
     exit();
 }
 require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/send_mail.php';
+
+// Mazání neověřených účtů starších než 2 dny
+$pdo->exec("DELETE FROM users WHERE is_verified=0 AND registered_at < (NOW() - INTERVAL 2 DAY)");
 
 $message = '';
 $success = false;
@@ -20,11 +24,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['first_name'] = $user['first_name'];
-            $_SESSION['role'] = $user['role'] ?? null;
-            header("Location: index.php");
-            exit;
+            if (!$user['is_verified']) {
+                $message = "Please confirm your email address first.";
+            } else {
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['first_name'] = $user['first_name'];
+                $_SESSION['role'] = $user['role'] ?? null;
+                header("Location: index.php");
+                exit;
+            }
         } else {
             $message = "Invalid email or password.";
         }
@@ -45,14 +53,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $message = "Passwords do not match.";
         } else {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            try {
-                $stmt = $pdo->prepare("INSERT INTO users (nickname, first_name, last_name, email, password) VALUES (?, ?, ?, ?, ?)");
-                $stmt->execute([$nickname, $firstName, $lastName, $email, $hashedPassword]);
-                $message = "Registration successful. You can now log in.";
-                $success = true;
-            } catch (PDOException $e) {
-                $message = "Registration failed: " . $e->getMessage();
-            }
+            $verifyToken = bin2hex(random_bytes(32));
+            $stmt = $pdo->prepare("INSERT INTO users (nickname, first_name, last_name, email, password, verify_token, is_verified, registered_at) VALUES (?, ?, ?, ?, ?, ?, 0, NOW())");
+            $stmt->execute([$nickname, $firstName, $lastName, $email, $hashedPassword, $verifyToken]);
+
+            sendVerificationMail($email, $nickname, $verifyToken);
+
+            $message = "Registration successful. Please check your email and confirm your account.";
+            $success = true;
         }
     }
 }

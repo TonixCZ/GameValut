@@ -1,6 +1,13 @@
 <?php
 require_once __DIR__ . '/includes/admin_logic.php';
-require_once __DIR__ . '/includes/categories.php'; // přidej tento řádek
+require_once __DIR__ . '/includes/categories.php';
+
+// Kontrola přihlášení a role admin
+
+if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'admin') {
+    header('Location: authentication.php');
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,36 +20,103 @@ require_once __DIR__ . '/includes/categories.php'; // přidej tento řádek
     <link rel="stylesheet" href="styles/header.css" />
     <link rel="stylesheet" href="styles/footer.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
 </head>
 <body>
 <?php include 'layout/header.php'; ?>
+<!-- Hamburger pro mobil -->
+<button class="sidebar-toggle d-lg-none" aria-label="Toggle sidebar" onclick="toggleSidebar()">
+  <span class="bi bi-list" style="font-size:2em;"></span>
+</button>
 <div class="d-flex">
     <nav class="sidebar">
         <h3>Admin Panel</h3>
         <p class="mb-4">Logged in as:<br><strong><?=htmlspecialchars($user['first_name'])?></strong></p>
-        <a href="#" class="nav-link active" data-tab="games">Add New Game</a>
+        <a href="#" class="nav-link active" data-tab="dashboard">Dashboard</a>
+        <a href="#" class="nav-link" data-tab="games">Add New Game</a>
         <a href="#" class="nav-link" data-tab="news">Manage News</a>
         <a href="#" class="nav-link" data-tab="users">Manage Users</a>
         <a href="#" class="nav-link" data-tab="manage_games">Manage Games</a>
+        <a href="#" class="nav-link" data-tab="manage_reviews">Manage Reviews</a>
         <a href="logout.php">Log Out</a>
     </nav>
     <main class="content container">
-        <!-- Add Game -->
+        <?php if (!empty($_SESSION['alert'])): ?>
+            <div class="alert alert-<?= $_SESSION['alert']['type'] ?> d-flex align-items-center gap-2">
+                <span class="bi <?= $_SESSION['alert']['type'] === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill' ?>" style="font-size:1.5em;"></span>
+                <span><?= htmlspecialchars($_SESSION['alert']['msg']) ?></span>
+            </div>
+            <?php unset($_SESSION['alert']); ?>
+        <?php endif; ?>
         <div class="tab-content">
-            <div class="tab-pane active" id="games">
+            <!-- Dashboard -->
+            <div class="tab-pane active" id="dashboard">
+                <h1 class="mb-4">📊 Dashboard</h1>
+                <div class="row g-4 mb-4">
+                    <div class="col-6 col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-value"><?= $totalUsers ?></div>
+                            <div class="stat-label">Users</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-value"><?= $unverifiedUsers ?></div>
+                            <div class="stat-label">Unverified Users</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-value"><?= $totalGames ?></div>
+                            <div class="stat-label">Games</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-value"><?= $totalReviews ?></div>
+                            <div class="stat-label">Reviews</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-lg-7">
+                        <div class="stat-card">
+                            <h5 class="mb-3">Visits (last 7 days)</h5>
+                            <canvas id="visitsChart" height="120"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-5">
+                        <div class="stat-card h-100 d-flex flex-column justify-content-center align-items-center">
+                            <div class="stat-label mb-2">Top Reviewer</div>
+                            <div class="stat-value"><?= htmlspecialchars($topReviewer['nickname'] ?? '-') ?></div>
+                            <div><?= $topReviewer['review_count'] ?? 0 ?> reviews</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-4 mb-4">
+                    <div class="col-4 col-md-2">
+                        <div class="stat-card text-center">
+                            <div class="stat-value"><?= $todayVisits ?></div>
+                            <div class="stat-label">Today</div>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <div class="stat-card text-center">
+                            <div class="stat-value"><?= $weekVisits ?></div>
+                            <div class="stat-label">Last 7 Days</div>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <div class="stat-card text-center">
+                            <div class="stat-value"><?= $monthVisits ?></div>
+                            <div class="stat-label">Last 30 Days</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Add Game -->
+            <div class="tab-pane" id="games">
                 <h1 class="mb-4">Add New Game</h1>
-                <?php if ($successMsg): ?>
-                    <div class="alert alert-success d-flex align-items-center gap-2">
-                        <span class="bi bi-check-circle-fill" style="font-size:1.5em;"></span>
-                        <span><?=htmlspecialchars($successMsg)?></span>
-                    </div>
-                <?php endif; ?>
-                <?php if ($errorMsg): ?>
-                    <div class="alert alert-danger d-flex align-items-center gap-2">
-                        <span class="bi bi-exclamation-triangle-fill" style="font-size:1.5em;"></span>
-                        <span><?=htmlspecialchars($errorMsg)?></span>
-                    </div>
-                <?php endif; ?>
                 <form method="POST" enctype="multipart/form-data" novalidate>
                     <input type="hidden" name="add_game" value="1">
                     <div class="mb-3">
@@ -110,6 +184,13 @@ require_once __DIR__ . '/includes/categories.php'; // přidej tento řádek
                     <div class="mb-3">
                         <label class="form-label">Content *</label>
                         <textarea name="news_content" class="form-control" rows="4" required minlength="10"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Type *</label>
+                        <select name="news_type" class="form-select" required>
+                            <option value="news">News</option>
+                            <option value="tip">Tip</option>
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Add News / Tip</button>
                 </form>
@@ -206,21 +287,58 @@ require_once __DIR__ . '/includes/categories.php'; // přidej tento řádek
                     </tbody>
                 </table>
             </div>
+            <!-- Manage Reviews -->
+            <div class="tab-pane" id="manage_reviews">
+                <h1 class="mb-4">Manage Reviews</h1>
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Game</th>
+                                <th>User</th>
+                                <th>Rating</th>
+                                <th>Review</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($reviews as $review): ?>
+                            <tr>
+                                <td><?= $review['id'] ?></td>
+                                <td><?= htmlspecialchars($review['title']) ?></td>
+                                <td><?= htmlspecialchars($review['nickname']) ?></td>
+                                <td><?= $review['rating'] ?></td>
+                                <td style="max-width:200px;overflow:auto;"><?= htmlspecialchars($review['comment']) ?></td>
+                                <td><?= date('d.m.Y H:i', strtotime($review['created_at'])) ?></td>
+                                <td>
+                                    <form method="post" style="display:inline;" onsubmit="return confirm('Delete this review?');">
+                                        <button type="submit" name="delete_review" value="<?= $review['id'] ?>" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </main>
 </div>
+<?php if (!empty($_SESSION['alert'])): ?>
+    <div class="alert alert-<?= $_SESSION['alert']['type'] ?> d-flex align-items-center gap-2">
+        <span class="bi <?= $_SESSION['alert']['type'] === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill' ?>" style="font-size:1.5em;"></span>
+        <span><?= htmlspecialchars($_SESSION['alert']['msg']) ?></span>
+    </div>
+    <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Tab switching
-    document.querySelectorAll('.sidebar .nav-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-            document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(this.dataset.tab).classList.add('active');
-        });
-    });
+window.visitsLabels = <?= json_encode(array_column($visitsPerDay, 'date')) ?>;
+window.visitsData = <?= json_encode(array_column($visitsPerDay, 'count')) ?>;
 </script>
+<script src="js/admin_panel.js"></script>
 <?php include 'layout/footer.php'; ?>
 </body>
 </html>

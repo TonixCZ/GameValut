@@ -254,8 +254,80 @@
   text-shadow: 0 2px 8px #23272b;
 }
 
+/* RESPONSIVE HEADER */
+@media (max-width: 991px) {
+  .navbar .container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.7rem;
+  }
+  .navbar-brand {
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+  }
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .auth-menu {
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
 @media (max-width: 767px) {
-  .navbar-brand { font-size: 1.3rem; }
-  .nav-link, .user-btn, .login-link { font-size: 0.98rem; padding: 0.35rem 0.7rem; }
-  .auth-menu { gap: 0.5rem; }
+  .navbar {
+    padding: 0.5rem 0.3rem;
+    font-size: 0.98rem;
+  }
+  .navbar-brand {
+    font-size: 1.1rem;
+    margin-bottom: 0.2rem;
+  }
+  .nav-link, .user-btn, .login-link {
+    font-size: 0.95rem;
+    padding: 0.32rem 0.6rem;
+  }
+  .auth-menu {
+    gap: 0.3rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .user-dropdown {
+    width: 100%;
+  }
+  .dropdown-btn.user-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .user-menu {
+    min-width: 100%;
+    left: 0;
+    right: 0;
+  }
+  .navbar .container {
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+  }
+  .navbar img {
+    height: 38px !important;
+    margin-right: 8px !important;
+  }
+}
+
+/* Zajistí, že menu se nezalamuje špatně na malých displejích */
+@media (max-width: 480px) {
+  .navbar-brand span {
+    font-size: 1rem !important;
+  }
+  .nav-link, .user-btn, .login-link {
+    font-size: 0.88rem;
+    padding: 0.25rem 0.4rem;
+  }
 }

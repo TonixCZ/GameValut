@@ -1,9 +1,15 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once 'config.php';
 
 // Získání ID hry z GET
 $game_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+/**
+ * Checks if the $game_id variable is set and valid.
+ * If $game_id is not set or is falsy, terminates the script and outputs 'Game not found.'.
+ */
 if (!$game_id) die('Game not found.');
 
 // Načtení detailu hry
@@ -14,22 +20,14 @@ if (!$game) die('Game not found.');
 
 // Připojení logiky recenzí
 include __DIR__ . '/includes/game_review_logic.php';
-
-// Načtení recenzí a průměrného hodnocení
-$stmt = $pdo->prepare("SELECT r.*, u.first_name, u.last_name FROM reviews r JOIN users u ON r.user_id = u.id WHERE r.game_id = ? ORDER BY r.created_at DESC");
-$stmt->execute([$game_id]);
-$reviews = $stmt->fetchAll();
-
-$stmt = $pdo->prepare("SELECT AVG(rating) as avg_rating FROM reviews WHERE game_id = ?");
-$stmt->execute([$game_id]);
-$average_rating = $stmt->fetchColumn();
-?>
+require_once __DIR__ . '/includes/game_detail.logic.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <title><?= htmlspecialchars($game['title']) ?> | GameVault</title>
     <meta name="description" content="<?= htmlspecialchars(mb_substr(strip_tags($game['description']), 0, 160)) ?>">
+    <meta name="keywords" content="GameVault, <?= htmlspecialchars($game['title']) ?>, game detail, reviews, platform, genre, rating, <?= htmlspecialchars($game['platform']) ?>">
     <meta property="og:title" content="<?= htmlspecialchars($game['title']) ?> | GameVault">
     <meta property="og:description" content="<?= htmlspecialchars(mb_substr(strip_tags($game['description']), 0, 160)) ?>">
     <?php if (!empty($game['image'])): ?>
@@ -37,26 +35,14 @@ $average_rating = $stmt->fetchColumn();
     <?php endif; ?>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="styles/styles.css" />
-    <link rel="stylesheet" href="styles/game_detail.css" />
+    <link rel="stylesheet" href="styles/game_detail.css?v=2" />
     <link rel="stylesheet" href="styles/footer.css" />
     <link rel="stylesheet" href="styles/header.css" />
-    <style>
-    .blink {
-        animation: blink-animation 1s steps(2, start) 3;
-        background: #ffe066;
-        color: #222 !important;
-        border-radius: 8px;
-        padding: 0.5em 0.5em;
-    }
-    @keyframes blink-animation {
-        to { visibility: hidden; }
-    }
-    </style>
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
 </head>
 <body class="bg-dark text-light">
 
 <?php include 'layout/header.php'; ?>
-
 
 <div class="container py-5">
     <?php if (!empty($_SESSION['alert'])): ?>
@@ -99,51 +85,31 @@ $average_rating = $stmt->fetchColumn();
         <?php endif; ?>
     </div>
 
+    <!-- Nadpis sekce -->
     <div class="section-title mt-5">
         <h3>Reviews</h3>
     </div>
+    <!-- Filtr přímo pod nadpisem -->
+    <div class="mb-4 d-flex align-items-center gap-2" style="max-width:400px;">
+        <label for="sort" class="mb-0 fw-bold text-primary">Sort by:</label>
+        <select name="sort" id="sort-reviews" class="form-select form-select-sm" style="width:auto;">
+            <option value="newest" <?= (!isset($_GET['sort']) || $_GET['sort']=='newest') ? 'selected' : '' ?>>Newest</option>
+            <option value="best" <?= (isset($_GET['sort']) && $_GET['sort']=='best') ? 'selected' : '' ?>>Best rated</option>
+            <option value="liked" <?= (isset($_GET['sort']) && $_GET['sort']=='liked') ? 'selected' : '' ?>>Most liked</option>
+        </select>
+    </div>
 
-    <?php if (!empty($error)): ?>
-        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-    <?php endif; ?>
-
+    <!-- Výpis recenzí -->
     <div id="reviews-container">
-        <?php if ($reviews): ?>
-            <?php foreach ($reviews as $review): ?>
-                <div class="review-card <?= (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $review['user_id']) ? 'my-review' : '' ?>" data-review-id="<?= $review['id'] ?>">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="username">@<?= htmlspecialchars($review['first_name'] . ' ' . $review['last_name']) ?></span>
-                        <span class="text-warning"><?= str_repeat("★", (int)$review['rating']) ?></span>
-                    </div>
-                    <p><?= nl2br(htmlspecialchars($review['comment'])) ?></p>
-                    <small class="text-muted"><?= date('d.m.Y H:i', strtotime($review['created_at'])) ?></small>
-
-                    <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $review['user_id']): ?>
-                        <div class="mt-2">
-                            <form method="get" action="" style="display:inline;">
-                                <input type="hidden" name="id" value="<?= $game_id ?>">
-                                <input type="hidden" name="edit_review" value="<?= $review['id'] ?>">
-                                <button type="submit" class="btn btn-sm btn-primary">Edit</button>
-                            </form>
-                            <form method="post" action="" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this review?');">
-                                <input type="hidden" name="review_id" value="<?= $review['id'] ?>">
-                                <input type="hidden" name="game_id" value="<?= $game_id ?>">
-                                <button type="submit" name="delete_review" class="btn btn-sm btn-danger">Delete</button>
-                            </form>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p class="text-muted">No reviews yet.</p>
-        <?php endif; ?>
+        <?php include __DIR__ . '/includes/reviews_list.php'; ?>
     </div>
 
     <div class="mt-4">
         <?php if (isset($_SESSION['user_id'])): ?>
+            <!-- Editace recenze -->
             <?php if ($edit_review): ?>
                 <h4 id="review-form-container" class="blink">Edit Your Review</h4>
-                <form method="post" action="">
+                <form method="post" action="" class="review-form">
                     <input type="hidden" name="review_id" value="<?= $edit_review['id'] ?>">
                     <input type="hidden" name="game_id" value="<?= $game_id ?>">
                     <!-- Pro edit review -->
@@ -191,87 +157,30 @@ $average_rating = $stmt->fetchColumn();
             <p class="mt-4">You must <a href="authentication.php">log in</a> to write a review.</p>
         <?php endif; ?>
     </div>
+
+    <!-- Stránkování -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
+                <a class="page-link" href="?id=<?= $game_id ?>&sort=<?= htmlspecialchars($sort) ?>&page=<?= $page - 1 ?>" tabindex="-1">Previous</a>
+            </li>
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                    <a class="page-link" href="?id=<?= $game_id ?>&sort=<?= htmlspecialchars($sort) ?>&page=<?= $i ?>"><?= $i ?></a>
+                </li>
+            <?php endfor; ?>
+            <li class="page-item <?= $page == $totalPages ? 'disabled' : '' ?>">
+                <a class="page-link" href="?id=<?= $game_id ?>&sort=<?= htmlspecialchars($sort) ?>&page=<?= $page + 1 ?>">Next</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 <script>
-    // Alert auto-hide
-    setTimeout(() => {
-        const alert = document.getElementById('alert-message');
-        if(alert) alert.classList.remove('show');
-    }, 3500);
-
-    // Scroll & blink to edit form if editing
-    <?php if ($edit_review): ?>
-    window.onload = function() {
-        const form = document.getElementById('review-form-container');
-        if(form) {
-            form.scrollIntoView({behavior: "smooth", block: "center"});
-            form.classList.add('blink');
-            setTimeout(() => form.classList.remove('blink'), 1500);
-        }
-    };
-    <?php endif; ?>
-
-    // Show/hide new review form
-    document.getElementById('write-review-btn')?.addEventListener('click', () => {
-        const formContainer = document.getElementById('review-form-container');
-        if (formContainer.style.display === 'none' || !formContainer.style.display) {
-            formContainer.style.display = 'block';
-        } else {
-            formContainer.style.display = 'none';
-        }
-    });
-
-    document.querySelectorAll('.star-rating').forEach(function(starRating) {
-        const stars = starRating.querySelectorAll('.star');
-        const inputId = starRating.dataset.input;
-        const input = document.getElementById(inputId);
-        let currentValue = parseFloat(starRating.dataset.value) || 0;
-
-        function setStars(value) {
-            stars.forEach((star, i) => {
-                star.classList.remove('filled', 'half');
-                if (value >= i + 1) {
-                    star.classList.add('filled');
-                } else if (value > i && value < i + 1) {
-                    star.classList.add('half');
-                }
-            });
-        }
-
-        setStars(currentValue);
-
-        stars.forEach((star, i) => {
-            star.addEventListener('mousemove', function(e) {
-                const rect = star.getBoundingClientRect();
-                let percent = (e.clientX - rect.left) / rect.width;
-                let value = i + (percent >= 0.5 ? 1 : 0.5);
-                setStars(value);
-            });
-            star.addEventListener('mouseleave', function() {
-                setStars(currentValue);
-            });
-            star.addEventListener('click', function(e) {
-                const rect = star.getBoundingClientRect();
-                let percent = (e.clientX - rect.left) / rect.width;
-                currentValue = i + (percent >= 0.5 ? 1 : 0.5);
-                setStars(currentValue);
-                if (input) input.value = currentValue;
-            });
-        });
-    });
-
-    document.querySelectorAll('form.review-form').forEach(form => {
-        form.addEventListener('submit', function(e) {
-            const textarea = form.querySelector('textarea[name="comment"]');
-            if (textarea && textarea.value.trim().length < 30) {
-                alert("Your review must be at least 30 characters long.");
-                textarea.focus();
-                e.preventDefault();
-            }
-        });
-    });
+window.GAME_ID = <?= (int)$game_id ?>;
+<?php if (isset($edit_review)): ?>window.EDIT_REVIEW = true;<?php endif; ?>
 </script>
+<script src="js/game_detail.js"></script>
 <?php include 'layout/footer.php'; ?>
 </body>
 </html>

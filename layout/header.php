@@ -9,8 +9,13 @@ if ($isLoggedIn) {
     $stmt = $pdo->prepare("SELECT avatar, nickname FROM users WHERE id = ?");
     $stmt->execute([$_SESSION['user_id']]);
     $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
-    $avatarFile = $userRow['avatar'] ?: 'default.png';
-    $nickname = $userRow['nickname'] ?? '';
+    if ($userRow) {
+        $avatarFile = $userRow['avatar'] ?: 'default.png';
+        $nickname = $userRow['nickname'] ?? '';
+    } else {
+        $avatarFile = 'default.png';
+        $nickname = '';
+    }
 }
 ?>
 <link rel="stylesheet" href="header.css">
@@ -24,10 +29,10 @@ if ($isLoggedIn) {
 
     <ul class="nav gap-2">
       <li class="nav-item">
-        <a href="/all_games.php" class="nav-link text-light fw-semibold">Browse All Games</a>
+        <a href="/all_games" class="nav-link text-light fw-semibold">Browse All Games</a>
       </li>
       <li class="nav-item">
-        <a href="/about.php" class="nav-link text-light fw-semibold">About Us</a>
+        <a href="/about" class="nav-link text-light fw-semibold">About Us</a>
       </li>
     </ul>
 
@@ -49,16 +54,16 @@ if ($isLoggedIn) {
             <?= htmlspecialchars($nickname, ENT_QUOTES, 'UTF-8') ?> <span class="arrow">▼</span>
           </button>
           <ul class="dropdown-menu user-menu" id="userDropdownMenu" role="menu" aria-labelledby="userDropdownBtn" tabindex="-1">
-            <li role="none"><a href="/profile.php" class="dropdown-item" role="menuitem">Profile</a></li>
+            <li role="none"><a href="/profile" class="dropdown-item" role="menuitem">Profile</a></li>
             <?php if ($isAdmin): ?>
-              <li role="none"><a href="/admin_panel.php" class="dropdown-item" role="menuitem">Admin Panel</a></li>
+              <li role="none"><a href="/admin_panel" class="dropdown-item" role="menuitem">Admin Panel</a></li>
             <?php endif; ?>
             <li role="none"><hr class="dropdown-divider"></li>
-            <li role="none"><a href="/logout.php" class="dropdown-item text-danger" role="menuitem">Logout</a></li>
+            <li role="none"><a href="/logout" class="dropdown-item text-danger" role="menuitem">Logout</a></li>
           </ul>
         </div>
       <?php else: ?>
-        <a href="/authentication.php" class="login-link">Login / Sign Up</a>
+        <a href="/authentication" class="login-link">Login / Sign Up</a>
       <?php endif; ?>
     </div>
   </div>

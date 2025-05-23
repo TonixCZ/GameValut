@@ -114,6 +114,10 @@ body {
   margin-right: 0.5em;
   box-shadow: 0 2px 8px #6f52a3;
 }
+.news-block .badge.bg-success {
+  background: #4caf50;
+  color: #fff;
+}
 .news-block .news-meta {
   font-size: 0.95em;
   color: #bdbdbd;
@@ -198,11 +202,86 @@ body {
   border: 2px solid #444;
 }
 
+/* Animace pro fade-in sekce */
+.fade-in {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.7s cubic-bezier(.4,0,.2,1);
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Sticky CTA bar pro mobil */
+@media (max-width: 767px) {
+  .sticky-cta-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(90deg,#6f52a3 60%,#ff6b81 100%);
+    color: #fff;
+    z-index: 9999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 1.2rem;
+    box-shadow: 0 -2px 16px #6f52a3cc;
+  }
+  .sticky-cta-bar .btn {
+    font-size: 1.1em;
+    padding: 0.5em 1.2em;
+  }
+}
+
+/* Trending tags */
+.trending-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  justify-content: center;
+  margin-bottom: 2em;
+}
+.trending-tags .tag {
+  background: #23272b;
+  color: #ff6b81;
+  border-radius: 16px;
+  padding: 0.4em 1.1em;
+  font-weight: 600;
+  font-size: 1.08em;
+  border: 1.5px solid #6f52a3;
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+}
+.trending-tags .tag:hover {
+  background: #ff6b81;
+  color: #fff;
+}
+
 /* Responsivita */
 @media (max-width: 767px) {
   .hero {
-    padding: 40px 10px;
-    font-size: 1.2rem;
+    padding: 32px 8px 28px 8px;
+    font-size: 1rem;
+    margin-top: 1rem;
+    border-radius: 14px;
+  }
+  .hero h1 {
+    font-size: 2rem;
+    line-height: 1.2;
+    margin-bottom: 0.7em;
+    word-break: break-word;
+  }
+  .hero p {
+    font-size: 1.05rem;
+    margin-bottom: 1.2em;
+  }
+  .hero .btn {
+    font-size: 1.1rem;
+    padding: 0.7em 1.5em;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    display: block;
   }
   .featured-carousel .carousel-item img {
     height: 180px;
@@ -213,5 +292,32 @@ body {
   }
   .join-us {
     padding: 1.2rem 0.5rem;
+  }
+  .container {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  .section-title {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+  .card-featured, .news-block {
+    min-height: unset;
+    padding: 1rem 0.5rem;
+  }
+  .carousel-inner {
+    border-radius: 10px;
+  }
+  .hero {
+    font-size: 1rem;
+    padding: 1.2rem 0.3rem;
+  }
+  .join-us {
+    padding: 1.2rem 0.5rem;
+    font-size: 1rem;
+  }
+  .trending-tags {
+    gap: 0.3em;
+    font-size: 0.98em;
   }
 }

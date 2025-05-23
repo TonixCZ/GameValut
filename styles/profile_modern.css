@@ -1,0 +1,29 @@
+body {
+    background: linear-gradient(135deg, #23243a 0%, #181824 100%);
+    min-height: 100vh;
+}
+.profile-modern {
+    background: linear-gradient(120deg, #23243a 80%, #3db4f2 100%);
+    color: #fff;
+    border-radius: 1.5em;
+    box-shadow: 0 4px 24px rgba(44,62,80,0.18);
+    padding: 2.5em 2em 2em 2em;
+}
+.profile-avatar-modern {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #ff6b81;
+    background: #23243a;
+    margin-bottom: 1em;
+}
+@media (max-width: 767px) {
+    .profile-modern {
+        padding: 1.2em 0.5em;
+    }
+    .profile-avatar-modern {
+        width: 80px;
+        height: 80px;
+    }
+}

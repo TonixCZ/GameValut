@@ -118,3 +118,67 @@ body {
             .sidebar { min-width: 180px; padding: 1rem 0.5rem; }
             .content { padding: 1rem; }
         }
+        @media (max-width: 767px) {
+    .stat-card {
+        padding: 1em 0.5em;
+        font-size: 0.95em;
+    }
+    .sidebar {
+        min-width: 120px;
+        font-size: 0.95em;
+    }
+    .table-responsive { overflow-x: auto; }
+    .table { min-width: 600px; }
+}
+        .stat-card {
+            background: #23272b;
+            border-radius: 12px;
+            padding: 2em 1em;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(44,62,80,0.10);
+            margin-bottom: 1em;
+        }
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #ff6b81;
+        }
+        .stat-label {
+            font-size: 1.1em;
+            color: #bbb;
+            margin-top: 0.5em;
+        }
+        .sidebar-toggle {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1051;
+    background: #6f52a3;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5em 0.7em;
+    display: none;
+}
+@media (max-width: 991px) {
+    .sidebar-toggle { display: block; }
+    .sidebar {
+        position: fixed;
+        left: -220px;
+        top: 0;
+        width: 200px;
+        height: 100vh;
+        z-index: 1050;
+        transition: left 0.3s;
+    }
+    .sidebar.open {
+        left: 0;
+        box-shadow: 2px 0 16px rgba(44,62,80,0.20);
+    }
+    .content {
+        margin-left: 0 !important;
+    }
+    body.sidebar-open {
+        overflow: hidden;
+    }
+}

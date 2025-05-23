@@ -17,12 +17,12 @@
         <h6>Quick Links</h6>
         <ul class="list-unstyled">
           <li><a href="/">Home</a></li>
-          <li><a href="/all_games.php">Browse All Games</a></li>
-          <li><a href="/about.php">About Us</a></li>
-          <li><a href="/contact.php">Contact Us</a></li>
+          <li><a href="/all_games">Browse All Games</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/contact">Contact Us</a></li>
           <?php if (!isset($_SESSION['user_id'])): ?>
-            <li><a href="/authentication.php">Login</a></li>
-            <li><a href="/authentication.php">Register</a></li>
+            <li><a href="/authentication">Login</a></li>
+            <li><a href="/authentication">Register</a></li>
           <?php endif; ?>
         </ul>
       </div>
@@ -34,12 +34,12 @@
           $footerCategories = ['Free to Play', 'Battle Royale', 'Shooter', 'RPG', 'Indie', 'Sports'];
           foreach ($footerCategories as $cat): ?>
             <li>
-              <a href="/all_games.php?category=<?= urlencode($cat) ?>">
+              <a href="/all_games?category=<?= urlencode($cat) ?>">
                 <?= htmlspecialchars($cat) ?>
               </a>
             </li>
           <?php endforeach; ?>
-          <li><a href="/all_games.php">Show all...</a></li>
+          <li><a href="/all_games">Show all...</a></li>
         </ul>
       </div>
     </div>

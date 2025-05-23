@@ -5,7 +5,7 @@ require_once __DIR__ . '/../config.php';
 
 // Kontrola admina
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: authentication.php');
     exit();
 }
 $stmt = $pdo->prepare("SELECT role, first_name FROM users WHERE id = ?");
@@ -23,7 +23,6 @@ $allCategories = [
 $allPlatforms = ['PC', 'Xbox', 'PlayStation', 'Switch', 'Mobile', 'Other'];
 
 // --- Přidání hry ---
-$successMsg = $errorMsg = null;
 $title = $description = $price = '';
 $selectedCategories = $selectedPlatforms = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_game'])) {
@@ -69,11 +68,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_game'])) {
                     $platformsCSV = implode(',', array_map('trim', $selectedPlatforms));
                     $stmt = $pdo->prepare("INSERT INTO games (title, description, price, platform, image, categories) VALUES (?, ?, ?, ?, ?, ?)");
                     if ($stmt->execute([$title, $description, floatval($price), $platformsCSV, $newFileName, $categoriesCSV])) {
-                        $successMsg = "Game has been successfully added.";
+                        $_SESSION['alert'] = ['type' => 'success', 'msg' => 'Game has been successfully added.'];
+                        // Reset formuláře
                         $title = $description = $price = '';
                         $selectedCategories = $selectedPlatforms = [];
                     } else {
-                        $errorMsg = "Database error while saving the game.";
+                        $_SESSION['alert'] = ['type' => 'danger', 'msg' => 'Database error while saving the game.'];
                         unlink($uploadPath);
                     }
                 } else {
@@ -89,21 +89,30 @@ $newsSuccess = $newsError = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_news'])) {
     $newsTitle = trim($_POST['news_title'] ?? '');
     $newsContent = trim($_POST['news_content'] ?? '');
-    if (strlen($newsTitle) < 3) {
-        $newsError = "Title must be at least 3 characters.";
+    $newsType = $_POST['news_type'] ?? 'news';
+
+    if (strlen($newsTitle) < 5) {
+        $newsError = "The news title must be at least 5 characters long.";
     } elseif (strlen($newsContent) < 10) {
-        $newsError = "Content must be at least 10 characters.";
+        $newsError = "The news content must be at least 10 characters long.";
     } else {
-        $stmt = $pdo->prepare("INSERT INTO news (title, content, author_id) VALUES (?, ?, ?)");
-        $stmt->execute([$newsTitle, $newsContent, $_SESSION['user_id']]);
-        $newsSuccess = "News/tip added!";
+        $stmt = $pdo->prepare("INSERT INTO news (title, content, type, author_id) VALUES (?, ?, ?, ?)");
+        if ($stmt->execute([$newsTitle, $newsContent, $newsType, $_SESSION['user_id']])) {
+            $_SESSION['alert'] = ['type' => 'success', 'msg' => 'News/tip added!'];
+        } else {
+            $_SESSION['alert'] = ['type' => 'danger', 'msg' => 'Database error while saving news/tip.'];
+        }
     }
 }
 
 // --- Mazání novinky ---
 if (isset($_POST['delete_news'])) {
     $newsId = (int)$_POST['delete_news'];
-    $pdo->prepare("DELETE FROM news WHERE id = ?")->execute([$newsId]);
+    if ($pdo->prepare("DELETE FROM news WHERE id = ?")->execute([$newsId])) {
+        $_SESSION['alert'] = ['type' => 'success', 'msg' => 'News/tip deleted.'];
+    } else {
+        $_SESSION['alert'] = ['type' => 'danger', 'msg' => 'Error deleting news/tip.'];
+    }
 }
 
 // --- Výpis novinek ---
@@ -114,7 +123,11 @@ $newsList = $stmt->fetchAll();
 if (isset($_POST['delete_user'])) {
     $del_id = (int)$_POST['delete_user'];
     if ($del_id !== $_SESSION['user_id']) {
-        $pdo->prepare("DELETE FROM users WHERE id = ?")->execute([$del_id]);
+        if ($pdo->prepare("DELETE FROM users WHERE id = ?")->execute([$del_id])) {
+            $_SESSION['alert'] = ['type' => 'success', 'msg' => 'User deleted.'];
+        } else {
+            $_SESSION['alert'] = ['type' => 'danger', 'msg' => 'Error deleting user.'];
+        }
     }
 }
 
@@ -131,18 +144,73 @@ $users = $stmt->fetchAll();
 if (isset($_POST['save_price'], $_POST['game_id'])) {
     $newPrice = floatval($_POST['edit_price']);
     $gameId = (int)$_POST['game_id'];
-    $pdo->prepare("UPDATE games SET price = ? WHERE id = ?")->execute([$newPrice, $gameId]);
-    $successMsg = "Price updated successfully.";
+    if ($pdo->prepare("UPDATE games SET price = ? WHERE id = ?")->execute([$newPrice, $gameId])) {
+        $_SESSION['alert'] = ['type' => 'success', 'msg' => 'Price updated successfully.'];
+    } else {
+        $_SESSION['alert'] = ['type' => 'danger', 'msg' => 'Error updating price.'];
+    }
 }
 
 // Mazání hry
 if (isset($_POST['delete_game'])) {
     $gameId = (int)$_POST['delete_game'];
-    $pdo->prepare("DELETE FROM games WHERE id = ?")->execute([$gameId]);
-    $successMsg = "Game deleted successfully.";
+    if ($pdo->prepare("DELETE FROM games WHERE id = ?")->execute([$gameId])) {
+        $_SESSION['alert'] = ['type' => 'success', 'msg' => 'Game deleted successfully.'];
+    } else {
+        $_SESSION['alert'] = ['type' => 'danger', 'msg' => 'Error deleting game.'];
+    }
 }
 $price = trim($_POST['price'] ?? '');
 if ($price === '' || !is_numeric($price)) {
     $price = 0;
 }
-?>
+
+// --- Statistiky pro dashboard ---
+$totalUsers = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
+$totalGames = $pdo->query("SELECT COUNT(*) FROM games")->fetchColumn();
+$totalReviews = $pdo->query("SELECT COUNT(*) FROM reviews")->fetchColumn();
+$topReviewer = $pdo->query("
+    SELECT u.nickname, COUNT(r.id) as review_count
+    FROM users u
+    JOIN reviews r ON u.id = r.user_id
+    GROUP BY u.id
+    ORDER BY review_count DESC
+    LIMIT 1
+")->fetch();
+$todayVisits = $pdo->query("SELECT COUNT(*) FROM visits WHERE DATE(visited_at) = CURDATE()")->fetchColumn();
+$weekVisits = $pdo->query("SELECT COUNT(*) FROM visits WHERE visited_at >= (CURDATE() - INTERVAL 6 DAY)")->fetchColumn();
+$monthVisits = $pdo->query("SELECT COUNT(*) FROM visits WHERE visited_at >= (CURDATE() - INTERVAL 29 DAY)")->fetchColumn();
+
+// Unverified users
+$unverifiedUsers = $pdo->query("SELECT COUNT(*) FROM users WHERE is_verified = 0")->fetchColumn();
+
+// Visits per day for last 7 days
+$visitsPerDay = [];
+for ($i = 6; $i >= 0; $i--) {
+    $date = date('Y-m-d', strtotime("-$i days"));
+    $count = $pdo->query("SELECT COUNT(*) FROM visits WHERE DATE(visited_at) = '$date'")->fetchColumn();
+    $visitsPerDay[] = [
+        'date' => date('D', strtotime($date)), // e.g. Mon, Tue
+        'count' => $count
+    ];
+}
+
+// --- Výpis recenzí pro admin panel
+$reviews = $pdo->query(
+    "SELECT r.id, r.rating, r.comment, r.created_at, 
+            u.nickname, g.title 
+     FROM reviews r 
+     JOIN users u ON r.user_id = u.id 
+     JOIN games g ON r.game_id = g.id 
+     ORDER BY r.created_at DESC 
+     LIMIT 100"
+)->fetchAll();
+
+// Mazání recenze
+if (isset($_POST['delete_review'])) {
+    $stmt = $pdo->prepare("DELETE FROM reviews WHERE id = ?");
+    $stmt->execute([$_POST['delete_review']]);
+    $_SESSION['alert'] = ['type' => 'success', 'msg' => 'Review deleted.'];
+    header("Location: admin_panel.php");
+    exit();
+}

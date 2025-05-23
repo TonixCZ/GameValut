@@ -43,3 +43,53 @@ footer a:hover {
   font-size: 0.8rem;
   color: #555;
 }
+
+/* RESPONSIVE FOOTER */
+@media (max-width: 991px) {
+  footer .container .row {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  footer .col-md-4 {
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  footer {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    font-size: 0.98rem;
+  }
+  footer h5, footer h6 {
+    font-size: 1.1rem;
+    margin-bottom: 0.7rem;
+  }
+  footer p, footer a, .text-muted, .small {
+    font-size: 0.95rem;
+  }
+  footer .container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  footer .row {
+    gap: 1.2rem;
+  }
+  footer ul {
+    padding-left: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  footer {
+    font-size: 0.92rem;
+  }
+  footer h5, footer h6 {
+    font-size: 1rem;
+  }
+  footer .container {
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+  }
+}

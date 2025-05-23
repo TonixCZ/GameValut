@@ -1,41 +1,38 @@
 // Autocomplete vyhledávání
-const searchInput = document.querySelector('input[name="search"]');
-const suggestionsBox = document.getElementById('search-suggestions');
+const searchInput = document.getElementById('game-search');
+const suggestions = document.getElementById('search-suggestions');
 
-searchInput.addEventListener('input', () => {
-  const query = searchInput.value.trim();
-  if (query.length < 2) {
-    suggestionsBox.style.display = 'none';
+let lastValue = '';
+searchInput.addEventListener('input', function() {
+  const val = this.value.trim();
+  if (val.length < 1) {
+    suggestions.style.display = 'none';
+    suggestions.innerHTML = '';
     return;
   }
-
-  fetch(`search_suggestions.php?q=${encodeURIComponent(query)}`)
-    .then(response => response.json())
+  if (val === lastValue) return;
+  lastValue = val;
+  fetch('includes/search_games.php?q=' + encodeURIComponent(val))
+    .then(res => res.json())
     .then(data => {
-      if (data.length === 0) {
-        suggestionsBox.style.display = 'none';
+      if (!data.length) {
+        suggestions.style.display = 'none';
+        suggestions.innerHTML = '';
         return;
       }
-      suggestionsBox.innerHTML = '';
-      data.forEach(game => {
-        const div = document.createElement('div');
-        div.textContent = game.name;
-        div.addEventListener('click', () => {
-          searchInput.value = game.name;
-          suggestionsBox.style.display = 'none';
-        });
-        suggestionsBox.appendChild(div);
-      });
-      suggestionsBox.style.display = 'block';
-    })
-    .catch(() => {
-      suggestionsBox.style.display = 'none';
+      suggestions.innerHTML = data.map(game =>
+        `<a href="game_detail?id=${game.id}" class="list-group-item list-group-item-action d-flex align-items-center">
+          <img src="${game.image ? 'uploads/games/' + game.image : 'assets/images/no-cover.png'}" alt="" style="width:32px;height:32px;object-fit:cover;border-radius:6px;margin-right:10px;">
+          <span>${game.title}</span>
+        </a>`
+      ).join('');
+      suggestions.style.display = 'block';
     });
 });
 
-// Kliknutí mimo box zavře suggestions
-document.addEventListener('click', (e) => {
-  if (!suggestionsBox.contains(e.target) && e.target !== searchInput) {
-    suggestionsBox.style.display = 'none';
+// Hide suggestions when clicking outside
+document.addEventListener('click', e => {
+  if (!searchInput.contains(e.target) && !suggestions.contains(e.target)) {
+    suggestions.style.display = 'none';
   }
 });

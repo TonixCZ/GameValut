@@ -5,11 +5,14 @@ require_once __DIR__ . '/includes/auth_logic.php';
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login / Register</title>
+    <title>Login / Register | GameVault</title>
+    <meta name="description" content="Log in or create a new account on GameVault. Join our gaming community to discover, review, and share the best games.">
+    <meta name="keywords" content="GameVault, login, register, sign up, gaming community, account, discover games, game reviews">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles/auth.css">
     <link rel="stylesheet" href="styles/header.css" />
     <link rel="stylesheet" href="styles/footer.css">
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
 </head>
 <body>
 <style>
@@ -22,6 +25,13 @@ require_once __DIR__ . '/includes/auth_logic.php';
         <div class="alert <?= $success ? 'alert-success' : 'alert-danger' ?> text-center fade show" id="message-alert">
             <?= htmlspecialchars($message) ?>
         </div>
+    <?php endif; ?>
+
+    <?php if (!empty($_SESSION['alert'])): ?>
+        <div class="alert alert-<?= $_SESSION['alert']['type'] ?> mt-3" role="alert">
+            <?= htmlspecialchars($_SESSION['alert']['msg']) ?>
+        </div>
+        <?php unset($_SESSION['alert']); ?>
     <?php endif; ?>
 
     <div class="wrapper">

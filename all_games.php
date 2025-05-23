@@ -8,9 +8,12 @@ require_once __DIR__ . '/includes/categories.php';
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>All Games | GameVault</title>
+  <meta name="description" content="Browse all games on GameVault. Discover, filter, and review the best games across all genres and platforms.">
+  <meta name="keywords" content="GameVault, all games, browse games, game list, reviews, discover, filter, genres, platforms, ratings">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="styles/all_games.css" />
   <link rel="stylesheet" href="styles/header.css" />
+  <link rel="icon" type="image/png" href="/assets/images/logo.png">
 </head>
 <body>
 <?php include 'layout/header.php'; ?>
@@ -19,8 +22,9 @@ require_once __DIR__ . '/includes/categories.php';
   <section class="mb-5">
     <h1 class="section-title text-center mb-4">🎲 All Games</h1>
     <form class="row g-3 align-items-end justify-content-center mb-4 filter-bar" method="get">
-      <div class="col-md-4">
-        <input type="search" name="search" class="form-control search-input" placeholder="Search games by name..." value="<?= htmlspecialchars($search) ?>">
+      <div class="col-md-4 position-relative">
+        <input type="search" name="search" id="game-search" class="form-control search-input" placeholder="Search games by name..." value="<?= htmlspecialchars($search) ?>" autocomplete="off">
+        <div id="search-suggestions" class="list-group position-absolute w-100" style="z-index:1000; display:none;"></div>
       </div>
       <div class="col-md-3">
         <select name="category" class="form-select category-select">
@@ -43,7 +47,7 @@ require_once __DIR__ . '/includes/categories.php';
         <div class="row g-4">
           <?php foreach ($games as $game): ?>
             <div class="col-md-4 col-lg-3">
-              <a href="game_detail.php?id=<?= (int)$game['id'] ?>" class="game-card-link text-decoration-none text-reset">
+              <a href="/game_detail?id=<?= (int)$game['id'] ?>" class="game-card-link text-decoration-none text-reset">
                 <div class="card game-card h-100">
                   <?php $imagePath = 'uploads/games/' . ($game['image'] ?? 'default.jpg'); ?>
                   <img src="<?= htmlspecialchars($imagePath) ?>" class="card-img-top" alt="<?= htmlspecialchars($game['title']) ?>">
@@ -91,5 +95,6 @@ require_once __DIR__ . '/includes/categories.php';
 </div>
 
 <?php include 'layout/footer.php'; ?>
+<script src="includes/search_suggestions.js"></script>
 </body>
 </html>

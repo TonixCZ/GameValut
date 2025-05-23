@@ -7,12 +7,15 @@ session_start();
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>About Us | GameVault</title>
+  <title>About GameVault | Discover, Review & Share Games</title>
+  <meta name="description" content="Learn about GameVault, the gaming community where players discover, review, and share the best games. Meet our team and join the adventure!">
+  <meta name="keywords" content="GameVault, about, gaming community, game reviews, discover games, team, gamers, indie games, multiplayer, RPG, platform">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="styles/styles.css" />
   <link rel="stylesheet" href="styles/header.css" />
   <link rel="stylesheet" href="styles/footer.css" />
   <link rel="stylesheet" href="styles/about.css" />
+<link rel="icon" type="image/png" href="/assets/images/logo.png">
 </head>
 <body>
 <?php include 'layout/header.php'; ?>

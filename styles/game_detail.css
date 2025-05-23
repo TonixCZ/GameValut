@@ -235,6 +235,92 @@ h2 {
     overflow: hidden;
 }
 
+/* Srdíčko - základní stav */
+.review-heart {
+    color: #bbb;
+    font-size: 1.5em;
+    transition: color 0.2s;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Srdíčko - když uživatel dal like */
+.review-heart.liked {
+    color: #ff6b81 !important;
+    text-shadow: 0 0 6px #ff6b81aa;
+}
+
+/* Srdíčko - když je tlačítko disabled (nepřihlášený uživatel) */
+.like-btn:disabled .review-heart {
+    color: #444 !important;
+    cursor: not-allowed;
+}
+
+/* Oprava stylu tlačítka, aby nebylo podtržené ani modré */
+.like-btn.btn-link {
+    text-decoration: none !important;
+    box-shadow: none !important;
+}
+.like-btn.btn-link:focus, 
+.like-btn.btn-link:active, 
+.like-btn.btn-link:hover {
+    text-decoration: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.review-comments {
+    border-left: 2px solid #3db4f2;
+    margin-top: 0.5em;
+    padding-left: 1em;
+    font-size: 0.98em;
+}
+.review-comment {
+    background: #23243a;
+    border-left: 3px solid #3db4f2;
+    border-radius: 8px;
+    margin-bottom: 0.5em;
+    padding: 0.5em 0.8em;
+}
+.review-comment .fw-bold {
+    color: #3db4f2;
+}
+.review-comment .btn-link {
+    color: #ff6b81;
+    text-decoration: underline;
+}
+.review-comment .btn-link.text-warning {
+    color: #ffc107 !important;
+}
+.review-comment .btn-link.text-danger {
+    color: #ff4d4f !important;
+}
+.edit-comment-form .form-control {
+    background: #181824;
+    color: #fff;
+    border: 1px solid #3db4f2;
+}
+.edit-comment-form .btn-outline-success {
+    border-color: #90ee90;
+    color: #90ee90;
+}
+.edit-comment-form .btn-outline-success:hover {
+    background: #90ee90;
+    color: #23243a;
+}
+
+.blink {
+    animation: blink-animation 1s steps(2, start) 3;
+    background: #ffe066;
+    color: #222 !important;
+    border-radius: 8px;
+    padding: 0.5em 0.5em;
+}
+@keyframes blink-animation {
+    to { visibility: hidden; }
+}
+
 @media (max-width: 767px) {
     .game-image {
         max-height: 220px;

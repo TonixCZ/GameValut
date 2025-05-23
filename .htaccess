@@ -1,12 +1,21 @@
 # Zapnout mod_rewrite
 RewriteEngine On
 
+# Vynutit HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 # Pokud existuje soubor nebo složka, neřeš přepis
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
 # Přepis pro detail hry: /game/nazev-hry => game_detail.php?slug=nazev-hry
 RewriteRule ^game/([a-zA-Z0-9\-_]+)$ game_detail.php?slug=$1 [L,QSA]
+
+# Skryj .php příponu
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([a-zA-Z0-9_-]+)$ $1.php [L]
 
 # Nastavit výchozí kódování
 AddDefaultCharset UTF-8
@@ -19,7 +28,11 @@ php_flag display_errors Off
     Deny from all
 </Files>
 
-# Ochrana .htaccess
+# Ochrana .htaccess samotného
 <Files .htaccess>
     Deny from all
 </Files>
+
+# Zákaz přímého přístupu ke všem PHP souborům ve složkách layout a uploads
+RewriteRule ^layout/.*\.php$ - [F,L]
+RewriteRule ^uploads/.*\.php$ - [F,L]

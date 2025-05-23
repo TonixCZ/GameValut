@@ -1,8 +1,10 @@
 <?php
-$host = 'localhost';
-$dbname = 'game_review';
-$user = 'root';
-$pass = '';
+// Project: Game:Valut
+
+$host = 'db.dw237.webglobe.com';
+$dbname = 'game_valut'; // ZDE případně uprav na skutečný název databáze!
+$user = 'tonix';
+$pass = 'Emmicka22';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
@@ -65,9 +67,23 @@ try {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(255) NOT NULL,
             content TEXT NOT NULL,
+            type ENUM('news','tip') NOT NULL DEFAULT 'news',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             author_id INT DEFAULT NULL,
             FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE SET NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ");
+
+    // Vytvoření tabulky review_likes
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS review_likes (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            review_id INT NOT NULL,
+            user_id INT NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY (review_id, user_id),
+            FOREIGN KEY (review_id) REFERENCES reviews(id) ON DELETE CASCADE,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ");
 

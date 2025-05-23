@@ -5,13 +5,23 @@ body {
 .container {
     max-width: 420px;
 }
+.settings-card {
+    background: linear-gradient(145deg, #1c102d, #372a70 90%);
+    box-shadow: 0 4px 24px rgba(44,62,80,0.18);
+    max-width: 480px;
+    margin: 2em auto;
+    border-radius: 1.2em;
+    padding: 2.5em 2em 2em 2em;
+    color: #fff;
+}
 .profile-avatar {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: 2px solid #3db4f2;
-    margin-bottom: 0.5em;
+    width: 90px;
+    height: 90px;
     object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #3db4f2;
+    margin-bottom: 1em;
+    background: #23243a;
 }
 .avatar-input {
     max-width: 220px;
@@ -46,6 +56,7 @@ body {
     color: #222 !important;
     border-color: #ff6b81;
 }
+.form-label { color: #3db4f2; font-weight: 600; }
 .edit-btn {
     background: none;
     border: none;
@@ -69,17 +80,14 @@ input[readonly] {
     font-size: 0.97em;
     margin-top: 0.2em;
 }
-.btn-success, .btn-secondary {
-    border-radius: 8px;
-    font-weight: 700;
-    padding: 0.5em 2em;
-    box-shadow: 0 2px 8px #6f52a3;
-    transition: background 0.2s, color 0.2s;
-}
 .btn-success {
     background: linear-gradient(90deg, #6f52a3 60%, #ff6b81 100%);
     border: none;
     color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.5em 2em;
+    box-shadow: 0 2px 8px #6f52a3;
 }
 .btn-success:hover {
     background: linear-gradient(90deg, #ff6b81 60%, #6f52a3 100%);
@@ -89,6 +97,9 @@ input[readonly] {
     background: #23243a;
     color: #fff;
     border: 1px solid #6f52a3;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.5em 2em;
 }
 .btn-secondary:hover {
     background: #6f52a3;
@@ -99,8 +110,9 @@ input[readonly] {
         padding: 1.2rem 0.5rem 1rem 0.5rem;
         max-width: 98vw;
     }
+    .settings-card { padding: 1.2em 0.5em; }
     .profile-avatar {
-        width: 60px !important;
-        height: 60px !important;
+        width: 60px;
+        height: 60px;
     }
 }

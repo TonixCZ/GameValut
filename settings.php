@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__ . '/config.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: authentication.php");
     exit();
 }
 
@@ -22,90 +22,70 @@ $avatarFile = $user['avatar'] ?: 'default.png';
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Settings</title>
+    <title>Edit Profile | GameVault</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Edit your GameVault account settings, update your profile information, change your password, and manage your avatar.">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="styles/settings.css" />
+    <link rel="stylesheet" href="styles/settings.css?v=<?= time() ?>">
     <link rel="stylesheet" href="styles/header.css" />
     <link rel="stylesheet" href="styles/footer.css" />
-    <style>
-        .invalid-feedback {
-            display: block;
-            color: #fff !important;
-            font-size: 0.97em;
-            margin-top: 0.2em;
-        }
-    </style>
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
 </head>
 <body>
 <?php include('layout/header.php'); ?>
 
-<div class="container py-5" style="max-width: 420px;">
-    <h2 class="mb-4 text-center">Edit Profile</h2>
-    <form id="settings-form" action="includes/update_profile.php" method="post" enctype="multipart/form-data" autocomplete="off">
-        <div class="avatar-row text-center mb-3">
-            <img src="uploads/users/<?= htmlspecialchars($avatarFile) ?>" alt="Avatar" class="profile-avatar">
-            <input type="file" name="avatar" class="form-control mt-2 avatar-input" accept="image/*" style="max-width:320px;margin:0 auto;">
-        </div>
-        <div class="form-row">
-            <label for="nickname">Nickname</label>
-            <input type="text" name="nickname" id="nickname" value="<?= htmlspecialchars($user['nickname']) ?>" class="form-control" required readonly>
-            <button type="button" class="edit-btn" data-target="nickname" aria-label="Edit"><span class="edit-icon">&#9998;</span></button>
-        </div>
-        <div class="invalid-feedback" id="nickname-feedback"></div>
-
-        <div class="form-row">
-            <label for="first_name">First Name</label>
-            <input type="text" name="first_name" id="first_name" value="<?= htmlspecialchars($user['first_name']) ?>" class="form-control" required readonly>
-            <button type="button" class="edit-btn" data-target="first_name" aria-label="Edit"><span class="edit-icon">&#9998;</span></button>
-        </div>
-
-        <div class="form-row">
-            <label for="last_name">Last Name</label>
-            <input type="text" name="last_name" id="last_name" value="<?= htmlspecialchars($user['last_name']) ?>" class="form-control" required readonly>
-            <button type="button" class="edit-btn" data-target="last_name" aria-label="Edit"><span class="edit-icon">&#9998;</span></button>
-        </div>
-
-        <div class="form-row">
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" value="<?= htmlspecialchars($user['email']) ?>" class="form-control" required readonly>
-            <button type="button" class="edit-btn" data-target="email" aria-label="Edit"><span class="edit-icon">&#9998;</span></button>
-        </div>
-        <div class="invalid-feedback" id="email-feedback"></div>
-
-        <div class="form-row">
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" class="form-control" placeholder="New password" readonly>
-            <button type="button" class="edit-btn" id="password-edit-btn" aria-label="Edit"><span class="edit-icon">&#9998;</span></button>
-        </div>
-        <div class="form-row">
-            <label for="password_confirm">Confirm Password</label>
-            <input type="password" name="password_confirm" id="password_confirm" class="form-control" placeholder="Repeat password" readonly>
-        </div>
-        <div class="invalid-feedback" id="password-feedback"></div>
-
-        <div class="d-flex justify-content-between mt-3">
-            <button type="submit" class="btn btn-success" id="save-btn" style="display:none;">Save Changes</button>
-            <a href="profile.php" class="btn btn-secondary">Back</a>
-        </div>
-    </form>
+<div class="container py-5">
+    <div class="settings-card">
+        <h2 class="mb-4 text-center">Edit Profile</h2>
+        <?php if (!empty($_SESSION['profile_error'])): ?>
+            <div class="alert alert-danger text-center">
+                <?= htmlspecialchars($_SESSION['profile_error']) ?>
+            </div>
+            <?php unset($_SESSION['profile_error']); ?>
+        <?php endif; ?>
+        <form id="settings-form" action="includes/update_profile.php" method="post" enctype="multipart/form-data" autocomplete="off">
+            <div class="text-center mb-3">
+                <img src="uploads/users/<?= htmlspecialchars($avatarFile) ?>" alt="Avatar" class="profile-avatar shadow">
+                <input type="file" name="avatar" class="form-control mt-2 avatar-input" accept="image/*" style="max-width:320px;margin:0 auto;">
+            </div>
+            <div class="mb-3">
+                <label for="nickname" class="form-label">Nickname</label>
+                <input type="text" name="nickname" id="nickname" value="<?= htmlspecialchars($user['nickname']) ?>" class="form-control" required>
+            </div>
+            <div class="invalid-feedback" id="nickname-feedback"></div>
+            <div class="mb-3">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" name="first_name" id="first_name" value="<?= htmlspecialchars($user['first_name']) ?>" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" name="last_name" id="last_name" value="<?= htmlspecialchars($user['last_name']) ?>" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" id="email" value="<?= htmlspecialchars($user['email']) ?>" class="form-control" required>
+            </div>
+            <div class="invalid-feedback" id="email-feedback"></div>
+            <div class="mb-3">
+                <label for="password" class="form-label">New Password</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Leave blank to keep current password">
+            </div>
+            <div class="mb-3">
+                <label for="password_confirm" class="form-label">Confirm Password</label>
+                <input type="password" name="password_confirm" id="password_confirm" class="form-control" placeholder="Repeat password">
+            </div>
+            <div class="invalid-feedback" id="password-feedback"></div>
+            <div class="d-flex justify-content-between mt-3">
+                <button type="submit" class="btn btn-success" id="save-btn">Save Changes</button>
+                <a href="profile.php" class="btn btn-secondary">Back</a>
+            </div>
+        </form>
+    </div>
 </div>
 
 <?php include('layout/footer.php'); ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// Unlock fields on pencil click and show Save
-document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const target = document.getElementById(this.dataset.target);
-        if (target) {
-            target.removeAttribute('readonly');
-            target.focus();
-            document.getElementById('save-btn').style.display = 'inline-block';
-        }
-    });
-});
-
 // AJAX check for nickname and email
 ['nickname', 'email'].forEach(function(field) {
     const input = document.getElementById(field);
@@ -150,14 +130,6 @@ document.getElementById('settings-form').addEventListener('submit', function(e) 
 
 // Show Save when avatar changes
 document.querySelector('input[type="file"][name="avatar"]').addEventListener('change', function() {
-    document.getElementById('save-btn').style.display = 'inline-block';
-});
-
-// Unlock both password fields when clicking the pencil
-document.getElementById('password-edit-btn').addEventListener('click', function() {
-    document.getElementById('password').removeAttribute('readonly');
-    document.getElementById('password_confirm').removeAttribute('readonly');
-    document.getElementById('password').focus();
     document.getElementById('save-btn').style.display = 'inline-block';
 });
 </script>

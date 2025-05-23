@@ -5,12 +5,15 @@ require_once __DIR__ . '/includes/contact_logic.php';
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Contact Us</title>
+    <title>Contact Us | GameVault</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Contact the GameVault team with your questions, feedback, or partnership inquiries. We're here to help you discover, review, and share the best games.">
+    <meta name="keywords" content="GameVault, contact, support, feedback, help, gaming community, questions, partnership">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="styles/header.css" />
     <link rel="stylesheet" href="styles/footer.css" />
     <link rel="stylesheet" href="styles/contact.css" />
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
 </head>
 <body>
 <?php include('layout/header.php'); ?>

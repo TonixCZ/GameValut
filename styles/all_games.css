@@ -124,6 +124,35 @@ body::before {
   transform: translateY(-4px) scale(1.01);
   border-color: #ff6b81;
 }
+#search-suggestions {
+  max-height: 260px;
+  overflow-y: auto;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 6px 24px #23272b44;
+  background: #23272b;
+}
+#search-suggestions .list-group-item {
+  background: #23272b;
+  color: #fff;
+  border: none;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+}
+#search-suggestions .list-group-item:last-child {
+  border-bottom: none;
+}
+#search-suggestions .list-group-item:hover {
+  background: #6f52a3;
+  color: #fff;
+}
+#search-suggestions .list-group-item img {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-right: 10px;
+  background: #222;
+}
 @media (max-width: 991px) {
   .game-card .card-img-top { height: 140px; }
 }
